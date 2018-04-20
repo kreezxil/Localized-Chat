@@ -1,0 +1,16 @@
+[
+{
+  "modid": "WhisperingShout",
+  "name": "Whispering Shout",
+  "description": "A regional chat mod that includes shouting.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["oliver276"],
+  "credits": "A little Youtube",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
