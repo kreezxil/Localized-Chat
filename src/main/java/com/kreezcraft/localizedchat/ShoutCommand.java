@@ -1,6 +1,5 @@
 package com.kreezcraft.localizedchat;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -10,130 +9,114 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.PlayerListComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ChunkCoordComparator;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ShoutCommand extends CommandBase{
-    private List aliases;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-    public ShoutCommand(){
-        this.aliases = new ArrayList();
-        this.aliases.add("s");
-        this.aliases.add("sh");
-        this.aliases.add("scream");
-        this.aliases.add("talklikemorgan");
-    }
+import com.mojang.realmsclient.gui.ChatFormatting;
 
-    @Override
-    public String getCommandName()
-    {
-        return "shout";
-    }
+public class ShoutCommand extends CommandBase {
+	private List aliases;
 
-    @Override
-    public String getCommandUsage(ICommandSender icommandsender)
-    {
-        return "shout <text>";
-    }
+	public ShoutCommand() {
+		this.aliases = new ArrayList();
+		this.aliases.add("s");
+		this.aliases.add("sh");
+		this.aliases.add("scream");
+	}
 
-    @Override
-    public List getCommandAliases()
-    {
-        return this.aliases;
-    }
+	public double compareCoordinatesDistance(BlockPos player1, BlockPos player2) {
+		double x = Math.abs(player1.getX() - player2.getX());
+		double y = Math.abs(player1.getY() - player2.getY());
+		double z = Math.abs(player1.getZ() - player2.getZ());
+		return x + y + z;
+	}
 
-    @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring)
-    {
-        EntityPlayer player;
+	@Override
+	@Nonnull
+	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args,
+			@Nullable BlockPos targetPos) {
+		return Collections.emptyList();
+	}
 
-        if(icommandsender instanceof EntityPlayer){
-            player = (EntityPlayer)icommandsender;
+	@Override
+	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+		return true;
+	}
 
-        }
-        else {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText("Player only command!"));
-            return;
-        }
-        if(astring.length < 1)
-        {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Invalid arguments."));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /shout <Message... ...>"));
-            return;
-        }
-
-        double range = 50;
-
-        StringBuilder strBuilder = new StringBuilder();
-
-        for (String word : astring){
-            strBuilder.append(word).append(" ");
-        }
-        String message = strBuilder.toString();
-        System.out.println(message);
-        World workingWorld = icommandsender.getEntityWorld();
-        List playerEntities = workingWorld.playerEntities;
-        EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(icommandsender.getCommandSenderName());
-        for(Object name : playerEntities){
-            EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getCommandSenderName()));
-            if (compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) <= range){
-                ((EntityPlayerMP) name).addChatMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[From " + EnumChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) + EnumChatFormatting.GOLD + " blocks away] " + EnumChatFormatting.GRAY + "<" + icommandsender.getCommandSenderName() + "> " + EnumChatFormatting.WHITE + message));
-            }
-
-        }
-    }
-
-    public double compareCoordinatesDistance(ChunkCoordinates player1, ChunkCoordinates player2){
-        double x = Math.abs(player1.posX - player2.posX);
-        double y = Math.abs(player1.posY - player2.posY);
-        double z = Math.abs(player1.posZ - player2.posZ);
-        return x + y + z;
-    }
-
-    @Override
-    public boolean canCommandSenderUseCommand(ICommandSender icommandsender)
-    {
-        return true;
-    }
-
-    @Override
-    public List addTabCompletionOptions(ICommandSender icommandsender,
-                                        String[] astring)
-    {
-        return null;
-    }
-
-    @Override
-    public boolean isUsernameIndex(String[] astring, int i)
-    {
-        return false;
-    }
-
-    @Override
-    public int compareTo(Object o)
-    {
-        return 0;
-    }
+	@Override
+	public boolean isUsernameIndex(String[] astring, int i) {
+		return false;
+	}
 
 	@Override
 	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "shout";
 	}
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		// TODO Auto-generated method stub
-		return null;
+		return "shout <text>";
 	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		// TODO Auto-generated method stub
-		
+		EntityPlayer player;
+
+		if (sender instanceof EntityPlayer) {
+			player = (EntityPlayer) sender;
+
+		}
+
+		else {
+			// what's the purpose of this?
+			return;
+		}
+
+		if (args.length < 1) {
+			player.sendMessage(new TextComponentString(ChatFormatting.DARK_RED + "Invalid arguments."));
+			player.sendMessage(new TextComponentString(ChatFormatting.DARK_GREEN + "Use /shout <Message... ...>"));
+			return;
+		}
+
+		double range = 50;
+
+		StringBuilder strBuilder = new StringBuilder();
+
+		for (String word : args) {
+			strBuilder.append(word).append(" ");
+		}
+		String message = strBuilder.toString();
+		// this doesn't need to go to the log, chatting puts it there anyway
+		// System.out.println(message);
+
+		// Since I want shout to be server wide, we will get all the players instead
+		// just the current world players
+		// World workingWorld = player.getEntityWorld();
+
+		World workingWorld = server.getEntityWorld();
+
+		List playerEntities = workingWorld.playerEntities;
+		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
+		for (Object name : playerEntities) {
+			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
+			((EntityPlayerMP) name)
+					.sendMessage(new TextComponentString(player.getName() + "> " + ChatFormatting.WHITE + message));
+		}
+	}
+
+	@Override
+	@Nonnull
+	public List<String> getAliases() {
+		return aliases;
 	}
 }
