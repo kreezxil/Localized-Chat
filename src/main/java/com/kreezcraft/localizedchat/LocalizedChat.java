@@ -1,18 +1,16 @@
-package me.oliver276.whisperingshout;
+package com.kreezcraft.localizedchat;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import net.minecraft.command.ICommand;
 import net.minecraft.init.Blocks;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ServerChatEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 
 @Mod(modid = LocalizedChat.MODID, version = LocalizedChat.VERSION, name = LocalizedChat.NAME)
-public class WhisperingShout
+public class LocalizedChat
 {
     public static final String MODID = "localizedchat";
 	public static final String NAME = "Localized Chat";

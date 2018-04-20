@@ -1,21 +1,16 @@
-package me.oliver276.whisperingshout;
+package com.kreezcraft.localizedchat;
 
 
-import cpw.mods.fml.client.config.GuiConfigEntries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.PlayerListComponent;
-import net.minecraft.server.management.PlayerManager;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ChunkCoordComparator;
@@ -32,25 +27,21 @@ public class ActionCommand extends CommandBase{
         this.aliases.add("ac");
     }
 
-    @Override
     public String getCommandName()
     {
         return "action";
     }
 
-    @Override
     public String getCommandUsage(ICommandSender icommandsender)
     {
         return "action <action>";
     }
 
-    @Override
     public List getCommandAliases()
     {
         return this.aliases;
     }
 
-    @Override
     public void processCommand(ICommandSender icommandsender, String[] astring)
     {
         EntityPlayer player;
@@ -59,13 +50,13 @@ public class ActionCommand extends CommandBase{
             player = (EntityPlayer)icommandsender;
         }
         else {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText("Player only command!"));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent("Player only command!"));
             return;
         }
         if(astring.length < 1)
         {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Invalid arguments."));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /action <Message... ...>"));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent( EnumChatFormatting.DARK_RED + "Invalid arguments."));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent( EnumChatFormatting.DARK_GREEN + "Use /action <Message... ...>"));
             return;
         }
 
@@ -84,7 +75,7 @@ public class ActionCommand extends CommandBase{
         for(Object name : playerEntities){
             EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getCommandSenderName()));
             if (compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) <= range){
-                ((EntityPlayerMP) name).addChatMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[From " + EnumChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) + EnumChatFormatting.GOLD + " blocks away] " + EnumChatFormatting.AQUA + icommandsender.getCommandSenderName() + " " + EnumChatFormatting.DARK_AQUA + message));
+                ((EntityPlayerMP) name).sendMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[From " + EnumChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) + EnumChatFormatting.GOLD + " blocks away] " + EnumChatFormatting.AQUA + icommandsender.getCommandSenderName() + " " + EnumChatFormatting.DARK_AQUA + message));
             }
 
         }
@@ -121,4 +112,22 @@ public class ActionCommand extends CommandBase{
     {
         return 0;
     }
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsage(ICommandSender sender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		// TODO Auto-generated method stub
+		
+	}
 }

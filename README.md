@@ -1,4 +1,8 @@
-# WhisperingShout_Forge
+# Localized Chat
 Talk within a range, disabling global chat and adding a few handy commands to assist chat.;
 
-Main: WhisperingShout (establishes and registers the other files as commands);
+# Original Mod: WhisperingShout 
+https://minecraft.curseforge.com/projects/whisperingshout MIT Licensed
+
+# Side
+Server, not required on client.

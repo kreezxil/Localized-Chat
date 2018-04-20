@@ -1,21 +1,15 @@
-package me.oliver276.whisperingshout;
+package com.kreezcraft.localizedchat;
 
 
-import cpw.mods.fml.client.config.GuiConfigEntries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.PlayerListComponent;
-import net.minecraft.server.management.PlayerManager;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ChunkCoordComparator;
@@ -23,27 +17,25 @@ import net.minecraftforge.common.util.ChunkCoordComparator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TalkCommand extends CommandBase{
+public class WhisperCommand extends CommandBase{
     private List aliases;
 
-    public TalkCommand(){
+    public WhisperCommand(){
         this.aliases = new ArrayList();
-        this.aliases.add("talk");
-        this.aliases.add("speak");
-        this.aliases.add("t");
-        this.aliases.add("ta");
+        this.aliases.add("wh");
+        this.aliases.add("w");
     }
 
     @Override
     public String getCommandName()
     {
-        return "talk";
+        return "whisper";
     }
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender)
     {
-        return "talk <range> <text>";
+        return "whisper <text>";
     }
 
     @Override
@@ -59,38 +51,24 @@ public class TalkCommand extends CommandBase{
 
         if(icommandsender instanceof EntityPlayer){
             player = (EntityPlayer)icommandsender;
-
         }
         else {
             icommandsender.addChatMessage((IChatComponent) new ChatComponentText("Player only command!"));
             return;
         }
-        if(astring.length < 2)
+        if(astring.length < 1)
         {
             icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Invalid arguments."));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /talk <blockRange> <Message... ...>"));
+            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /whisper <Message... ...>"));
             return;
         }
 
-        double range = 0;
-        try {
-            range = Double.valueOf(astring[0]);
-        } catch (Exception e){
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Not a recognised number: " + astring[0]));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /talk <blockRange> <Message... ...>"));
-            return;
-        }
-        if (range > 50.0){
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Not a chance you can shout as far as 50 blocks"));
-            return;
-        }
+        double range = 10;
+
         StringBuilder strBuilder = new StringBuilder();
-        boolean done1stword = false;
+
         for (String word : astring){
-            if (done1stword) {
-                strBuilder.append(word).append(" ");
-            }
-            done1stword = true;
+            strBuilder.append(word).append(" ");
         }
         String message = strBuilder.toString();
         System.out.println(message);
@@ -100,8 +78,8 @@ public class TalkCommand extends CommandBase{
         for(Object name : playerEntities){
             EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getCommandSenderName()));
             if (compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) <= range){
-                  ((EntityPlayerMP) name).addChatMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[From " + EnumChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) + EnumChatFormatting.GOLD + " blocks away] " + EnumChatFormatting.GRAY + "<" + icommandsender.getCommandSenderName() + "> " + EnumChatFormatting.WHITE + message));
-             }
+                ((EntityPlayerMP) name).addChatMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.GOLD + "[From " + EnumChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPlayerCoordinates(),comparePlayer.getPlayerCoordinates()) + EnumChatFormatting.GOLD + " blocks away] " + EnumChatFormatting.GRAY + "<" + icommandsender.getCommandSenderName() + "> " + EnumChatFormatting.WHITE + message));
+            }
 
         }
     }
@@ -137,4 +115,22 @@ public class TalkCommand extends CommandBase{
     {
         return 0;
     }
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsage(ICommandSender sender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		// TODO Auto-generated method stub
+		
+	}
 }

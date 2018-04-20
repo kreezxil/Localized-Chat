@@ -1,21 +1,15 @@
-package me.oliver276.whisperingshout;
+package com.kreezcraft.localizedchat;
 
 
-import cpw.mods.fml.client.config.GuiConfigEntries;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.command.PlayerSelector;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.gui.PlayerListComponent;
-import net.minecraft.server.management.PlayerManager;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.ChunkCoordComparator;
@@ -23,25 +17,27 @@ import net.minecraftforge.common.util.ChunkCoordComparator;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WhisperCommand extends CommandBase{
+public class ShoutCommand extends CommandBase{
     private List aliases;
 
-    public WhisperCommand(){
+    public ShoutCommand(){
         this.aliases = new ArrayList();
-        this.aliases.add("wh");
-        this.aliases.add("w");
+        this.aliases.add("s");
+        this.aliases.add("sh");
+        this.aliases.add("scream");
+        this.aliases.add("talklikemorgan");
     }
 
     @Override
     public String getCommandName()
     {
-        return "whisper";
+        return "shout";
     }
 
     @Override
     public String getCommandUsage(ICommandSender icommandsender)
     {
-        return "whisper <text>";
+        return "shout <text>";
     }
 
     @Override
@@ -57,6 +53,7 @@ public class WhisperCommand extends CommandBase{
 
         if(icommandsender instanceof EntityPlayer){
             player = (EntityPlayer)icommandsender;
+
         }
         else {
             icommandsender.addChatMessage((IChatComponent) new ChatComponentText("Player only command!"));
@@ -65,11 +62,11 @@ public class WhisperCommand extends CommandBase{
         if(astring.length < 1)
         {
             icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Invalid arguments."));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /whisper <Message... ...>"));
+            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /shout <Message... ...>"));
             return;
         }
 
-        double range = 10;
+        double range = 50;
 
         StringBuilder strBuilder = new StringBuilder();
 
@@ -121,4 +118,22 @@ public class WhisperCommand extends CommandBase{
     {
         return 0;
     }
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsage(ICommandSender sender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		// TODO Auto-generated method stub
+		
+	}
 }

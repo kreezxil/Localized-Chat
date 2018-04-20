@@ -1,14 +1,12 @@
-package me.oliver276.whisperingshout;
+package com.kreezcraft.localizedchat;
 
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -22,25 +20,21 @@ public class OutOfCharacter extends CommandBase {
         this.aliases.add("ooc");
     }
 
-    @Override
     public String getCommandName()
     {
         return "ooc";
     }
 
-    @Override
     public String getCommandUsage(ICommandSender icommandsender)
     {
         return "ooc <text>";
     }
 
-    @Override
     public List getCommandAliases()
     {
         return this.aliases;
     }
 
-    @Override
     public void processCommand(ICommandSender icommandsender, String[] astring)
     {
         EntityPlayer player;
@@ -50,13 +44,13 @@ public class OutOfCharacter extends CommandBase {
 
         }
         else {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText("Player only command!"));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent("Player only command!"));
             return;
         }
         if(astring.length < 1)
         {
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_RED + "Invalid arguments."));
-            icommandsender.addChatMessage((IChatComponent) new ChatComponentText( EnumChatFormatting.DARK_GREEN + "Use /ooc <Message... ...>"));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent( EnumChatFormatting.DARK_RED + "Invalid arguments."));
+            icommandsender.sendMessage((ITextComponent) new ITextComponent( EnumChatFormatting.DARK_GREEN + "Use /ooc <Message... ...>"));
             return;
         }
 
@@ -69,22 +63,20 @@ public class OutOfCharacter extends CommandBase {
         System.out.println(message);
         World workingWorld = icommandsender.getEntityWorld();
         List playerEntities = MinecraftServer.getServer().getConfigurationManager().playerEntityList;
-        EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(icommandsender.getCommandSenderName());
+        EntityPlayer mainPlayer = workingWorld.getPlayerEntityByUUID(icommandsender.getCommandSenderEntity());
         for(Object name : playerEntities){
-            EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getCommandSenderName()));
-            ((EntityPlayerMP) name).addChatMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.BLUE + "[Global Out-Of-Character Chat] " + EnumChatFormatting.GRAY + "<" + icommandsender.getCommandSenderName() + "> " + EnumChatFormatting.WHITE + message));
+            EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getCommandSenderEntity()));
+            ((EntityPlayerMP) name).sendMessage((IChatComponent) new ChatComponentText(EnumChatFormatting.BLUE + "[Global Out-Of-Character Chat] " + EnumChatFormatting.GRAY + "<" + icommandsender.getCommandSenderEntity() + "> " + EnumChatFormatting.WHITE + message));
 
 
         }
     }
 
-    @Override
     public boolean canCommandSenderUseCommand(ICommandSender icommandsender)
     {
         return true;
     }
 
-    @Override
     public List addTabCompletionOptions(ICommandSender icommandsender,
                                         String[] astring)
     {
@@ -97,9 +89,26 @@ public class OutOfCharacter extends CommandBase {
         return false;
     }
 
-    @Override
     public int compareTo(Object o)
     {
         return 0;
     }
+
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getUsage(ICommandSender sender) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
+		// TODO Auto-generated method stub
+		
+	}
 }
