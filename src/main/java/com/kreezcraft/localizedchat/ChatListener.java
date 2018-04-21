@@ -36,7 +36,7 @@ public class ChatListener {
 						+ Config.bracketColor.getString() + "] " 
 						+ Config.angleBraceColor.getString() + "<" 
 						+ Config.nameColor.getString() + event.getPlayer().getName() 
-						+ Config.angleBraceColor + "> " 
+						+ Config.angleBraceColor.getString() + "> " 
 						+ Config.bodyColor.getString() + message));
 			}
 

@@ -125,7 +125,7 @@ public class TalkCommand extends CommandBase {
 						+ Config.bracketColor.getString() + "] " 
 						+ Config.angleBraceColor.getString() + "<" 
 						+ Config.nameColor.getString() + player.getName() 
-						+ Config.angleBraceColor + "> " 
+						+ Config.angleBraceColor.getString() + "> " 
 						+ Config.bodyColor.getString() + message));
 			}
 
