@@ -35,13 +35,13 @@ public class Config {
 		cfg.addCustomCategoryComment(CATEGORY_RESTRICTIONS, "Chat Restrictions");
 		
 		cfg.addCustomCategoryComment(CATEGORY_RESTRICTIONS, "talkRange doesn't will not have a toggle value, because then the mod would be useless");
-		talkRange = cfg.get(CATEGORY_RESTRICTIONS, "talkRange", 100, "The maximum range at which a player local to another player can be heard without requiring shouting.");
+		talkRange = cfg.get(CATEGORY_RESTRICTIONS, "talkRange", 1000, "The maximum range at which a player local to another player can be heard without requiring shouting.");
 
-		requireHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "requireHealthFactor", true, "Enable actually needing health to perform a shout.");
-		minHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "minHealthFactor", 4, "The factor by which the health bar is divided and thus the minimum health required before a player can shout to the server");
+		requireHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "requireHealthFactor", false, "Enable actually needing health to perform a shout.");
+		minHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "minHealthFactor", 2, "The factor by which the health bar is divided and thus the minimum health required before a player can shout to the server");
 		
 		requireHunger = cfg.get(CATEGORY_RESTRICTIONS, "requireHunger", true, "Enable actually needing hunger saturation before being able to shout.");
-		minHunger = cfg.get(CATEGORY_RESTRICTIONS, "minHunger", 10, "Hunger is 20 integer (whole number) units, set this to the hunger cost per shout. The higher the number the less they can shout.");
+		minHunger = cfg.get(CATEGORY_RESTRICTIONS, "minHunger", 5, "Hunger is 20 integer (whole number) units, set this to the hunger cost per shout. The higher the number the less they can shout.");
 	}
 
 }

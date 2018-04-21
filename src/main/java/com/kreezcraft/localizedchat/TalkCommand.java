@@ -1,6 +1,5 @@
 package com.kreezcraft.localizedchat;
 
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
@@ -25,26 +24,26 @@ import javax.annotation.Nullable;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 
-public class TalkCommand extends CommandBase{
-    private List aliases;
+public class TalkCommand extends CommandBase {
+	private List aliases;
 
-    public TalkCommand() {
-        this.aliases = new ArrayList();
-        this.aliases.add("talk");
-        this.aliases.add("speak");
-        this.aliases.add("t");
-        this.aliases.add("ta");
-    }
+	public TalkCommand() {
+		this.aliases = new ArrayList();
+		this.aliases.add("talk");
+		this.aliases.add("speak");
+		this.aliases.add("t");
+		this.aliases.add("ta");
+	}
 
-    @Override
-    public String getName() {
-        return "talk";
-    }
+	@Override
+	public String getName() {
+		return "talk";
+	}
 
-    @Override
-    public String getUsage(ICommandSender sender) {
-        return "talk <range> <text>";
-    }
+	@Override
+	public String getUsage(ICommandSender sender) {
+		return "talk <range> <text>";
+	}
 
 	@Override
 	@Nonnull
@@ -72,55 +71,55 @@ public class TalkCommand extends CommandBase{
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-	       EntityPlayer player;
+		EntityPlayer player;
 
-	        if(sender instanceof EntityPlayer){
-	            player = (EntityPlayer)sender;
+		if (sender instanceof EntityPlayer) {
+			player = (EntityPlayer) sender;
 
-	        }
-	        else {
-	            return;
-	        }
+		} else {
+			return;
+		}
 
-	        if(args.length < 2)
-	        {
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_RED + "Invalid arguments."));
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_GREEN + "Use /talk <blockRange> <Message... ...>"));
-	            return;
-	        }
+		if (args.length < 2) {
+			player.sendMessage(new TextComponentString("Invalid arguments."));
+			player.sendMessage(new TextComponentString("Use /talk <blockRange> <Message... ...>"));
+			return;
+		}
 
-	        double range = 0;
-	        try {
-	            range = Double.valueOf(args[0]);
-	        } catch (Exception e){
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_RED + "Not a recognised number: " + args[0]));
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_GREEN + "Use /talk <blockRange> <Message... ...>"));
-	            return;
-	        }
-	        if (range > Config.talkRange.getInt()){
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_RED + "Not a chance you can only talk as far out as "+Config.talkRange.getInt()+" blocks"));
-	            return;
-	        }
-	        StringBuilder strBuilder = new StringBuilder();
-	        boolean done1stword = false;
-	        for (String word : args){
-	            if (done1stword) {
-	                strBuilder.append(word).append(" ");
-	            }
-	            done1stword = true;
-	        }
-	        String message = strBuilder.toString();
-	        System.out.println(message);
-	        World workingWorld = player.getEntityWorld();
-	        List playerEntities = workingWorld.playerEntities;
-	        EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
-	        for(Object name : playerEntities){
-	            EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
-	            if (compareCoordinatesDistance(mainPlayer.getPosition(),comparePlayer.getPosition()) <= range){
-	                  ((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatFormatting.GOLD + "[From " + ChatFormatting.RED + compareCoordinatesDistance(mainPlayer.getPosition(),
-	                		  comparePlayer.getPosition()) + ChatFormatting.GOLD + " blocks away] " + ChatFormatting.GRAY + "<" + player.getName() + "> " + ChatFormatting.WHITE + message));
-	             }
+		double range = 0;
+		try {
+			range = Double.valueOf(args[0]);
+		} catch (Exception e) {
+			player.sendMessage(new TextComponentString("Not a recognised number: " + args[0]));
+			player.sendMessage(new TextComponentString("Use /talk <blockRange> <Message... ...>"));
+			return;
+		}
+		if (range > Config.talkRange.getInt()) {
+			player.sendMessage(new TextComponentString(
+					"Not a chance you can only talk as far out as " + Config.talkRange.getInt() + " blocks"));
+			return;
+		}
+		StringBuilder strBuilder = new StringBuilder();
+		boolean done1stword = false;
+		for (String word : args) {
+			if (done1stword) {
+				strBuilder.append(word).append(" ");
+			}
+			done1stword = true;
+		}
+		String message = strBuilder.toString();
+		System.out.println(message);
+		World workingWorld = player.getEntityWorld();
+		List playerEntities = workingWorld.playerEntities;
+		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
+		for (Object name : playerEntities) {
+			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
+			if (compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition()) <= range) {
+				((EntityPlayerMP) name).sendMessage(new TextComponentString(
+						"[From " + compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
+								+ " blocks away] " + "<" + player.getName() + "> " + message));
+			}
 
-	        }
+		}
 	}
 }

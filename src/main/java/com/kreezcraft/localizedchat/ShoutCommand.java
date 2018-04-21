@@ -83,17 +83,17 @@ public class ShoutCommand extends CommandBase {
 		}
 
 		if (args.length < 1) {
-			player.sendMessage(new TextComponentString(ChatFormatting.DARK_RED + "Invalid arguments."));
-			player.sendMessage(new TextComponentString(ChatFormatting.DARK_GREEN + "Use /shout <Message... ...>"));
+			player.sendMessage(new TextComponentString("Invalid arguments."));
+			player.sendMessage(new TextComponentString("Use /shout <Message... ...>"));
 			return;
 		}
 		if(Config.requireHealthFactor.getBoolean() && player.getHealth() < player.getMaxHealth()/4) {
-			player.sendMessage(new TextComponentString(ChatFormatting.RED + "You are to weak to shout!"));
+			player.sendMessage(new TextComponentString("You are to weak to shout!"));
 			return;
 		}
 		
 		if(Config.requireHunger.getBoolean() && player.getFoodStats().getFoodLevel() < Config.minHunger.getInt()) {
-			player.sendMessage(new TextComponentString(ChatFormatting.AQUA + "You are too hungry to shout!"));
+			player.sendMessage(new TextComponentString("You are too hungry to shout!"));
 			return;
 		} else {
 			if(Config.requireHunger.getBoolean()) {
@@ -121,7 +121,7 @@ public class ShoutCommand extends CommandBase {
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
 			((EntityPlayerMP) name)
-					.sendMessage(new TextComponentString(player.getName() + "> " + ChatFormatting.WHITE + message));
+					.sendMessage(new TextComponentString(player.getName() + "> " + message));
 		}
 	}
 
