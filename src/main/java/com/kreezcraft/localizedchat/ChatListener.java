@@ -29,8 +29,15 @@ public class ChatListener {
 					.getPlayerEntityByUUID(((EntityPlayerMP) name).getCommandSenderEntity().getUniqueID()));
 			if (compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition()) <= range) {
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(
-						"[From " + compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
-								+ " blocks away] " + "<" + event.getPlayer().getName() + "> " + message));
+						Config.bracketColor.getString() + "["
+						+ Config.defaultColor.getString() + "From " 
+						+ Config.posColor.getString() + compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
+						+ Config.defaultColor.getString() + " blocks away" 
+						+ Config.bracketColor.getString() + "] " 
+						+ Config.angleBraceColor.getString() + "<" 
+						+ Config.nameColor.getString() + event.getPlayer().getName() 
+						+ Config.angleBraceColor + "> " 
+						+ Config.bodyColor.getString() + message));
 			}
 
 		}

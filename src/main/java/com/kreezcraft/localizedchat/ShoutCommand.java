@@ -83,24 +83,36 @@ public class ShoutCommand extends CommandBase {
 		}
 
 		if (args.length < 1) {
-			player.sendMessage(new TextComponentString("Invalid arguments."));
-			player.sendMessage(new TextComponentString("Use /shout <Message... ...>"));
+			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
+			player.sendMessage(new TextComponentString(Config.usageColor.getString() + "Use /shout <Message... ...>"));
 			return;
 		}
-		if(Config.requireHealthFactor.getBoolean() && player.getHealth() < player.getMaxHealth()/4) {
-			player.sendMessage(new TextComponentString("You are to weak to shout!"));
+		if (Config.requireHealthFactor.getBoolean() && player.getHealth() < player.getMaxHealth() / 4) {
+			if (Config.enableFoodMessage.getBoolean()) {
+				player.sendMessage(
+						new TextComponentString(Config.bodyColor.getString() + Config.healthMessage.getString()));
+			} else {
+				player.sendMessage(new TextComponentString(
+						Config.bodyColor.getString() + Config.defaultHealthMessage.getString()));
+			}
 			return;
 		}
-		
-		if(Config.requireHunger.getBoolean() && player.getFoodStats().getFoodLevel() < Config.minHunger.getInt()) {
-			player.sendMessage(new TextComponentString("You are too hungry to shout!"));
+
+		if (Config.requireHunger.getBoolean() && player.getFoodStats().getFoodLevel() < Config.minHunger.getInt()) {
+			if (Config.enableHealthMessage.getBoolean()) {
+				player.sendMessage(
+						new TextComponentString(Config.bodyColor.getString() + Config.healthMessage.getString()));
+			} else {
+				player.sendMessage(new TextComponentString(
+						Config.bodyColor.getString() + Config.defaultHealthMessage.getString()));
+			}
 			return;
 		} else {
-			if(Config.requireHunger.getBoolean()) {
-				player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel()-Config.minHunger.getInt());
+			if (Config.requireHunger.getBoolean()) {
+				player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel() - Config.minHunger.getInt());
 			}
 		}
-		
+
 		StringBuilder strBuilder = new StringBuilder();
 
 		for (String word : args) {
@@ -120,8 +132,11 @@ public class ShoutCommand extends CommandBase {
 		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
-			((EntityPlayerMP) name)
-					.sendMessage(new TextComponentString(player.getName() + "> " + message));
+			((EntityPlayerMP) name).sendMessage(new TextComponentString(
+					Config.angleBraceColor.getString() + "<"
+					+ Config.nameColor.getString() + player.getName() 
+					+ Config.angleBraceColor.getString() + "> " 
+					+ Config.bodyColor.getString() + message));
 		}
 	}
 

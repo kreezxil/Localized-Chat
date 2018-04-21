@@ -81,8 +81,8 @@ public class TalkCommand extends CommandBase {
 		}
 
 		if (args.length < 2) {
-			player.sendMessage(new TextComponentString("Invalid arguments."));
-			player.sendMessage(new TextComponentString("Use /talk <blockRange> <Message... ...>"));
+			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
+			player.sendMessage(new TextComponentString(Config.usageColor.getString() + "Use /talk <blockRange> <Message... ...>"));
 			return;
 		}
 
@@ -90,13 +90,15 @@ public class TalkCommand extends CommandBase {
 		try {
 			range = Double.valueOf(args[0]);
 		} catch (Exception e) {
-			player.sendMessage(new TextComponentString("Not a recognised number: " + args[0]));
-			player.sendMessage(new TextComponentString("Use /talk <blockRange> <Message... ...>"));
+			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Not a recognised number: " + args[0]));
+			player.sendMessage(new TextComponentString(Config.usageColor.getString() + "Use /talk <blockRange> <Message... ...>"));
 			return;
 		}
 		if (range > Config.talkRange.getInt()) {
 			player.sendMessage(new TextComponentString(
-					"Not a chance you can only talk as far out as " + Config.talkRange.getInt() + " blocks"));
+					Config.errorColor.getString() + "Not a chance you can only talk as far out as " 
+					+ Config.posColor.getString() + Config.talkRange.getInt() 
+					+ Config.errorColor.getString() + " blocks"));
 			return;
 		}
 		StringBuilder strBuilder = new StringBuilder();
@@ -116,8 +118,15 @@ public class TalkCommand extends CommandBase {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
 			if (compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition()) <= range) {
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(
-						"[From " + compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
-								+ " blocks away] " + "<" + player.getName() + "> " + message));
+						Config.bracketColor.getString() + "["
+						+ Config.defaultColor.getString() + "From " 
+						+ Config.posColor.getString() + compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
+						+ Config.defaultColor.getString() + " blocks away" 
+						+ Config.bracketColor.getString() + "] " 
+						+ Config.angleBraceColor.getString() + "<" 
+						+ Config.nameColor.getString() + player.getName() 
+						+ Config.angleBraceColor + "> " 
+						+ Config.bodyColor.getString() + message));
 			}
 
 		}

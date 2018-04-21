@@ -13,9 +13,16 @@ public class Config {
 	public static Configuration cfg = LocalizedChat.config;
 
 	public static String CATEGORY_RESTRICTIONS = "restrictions";
-
+	public static String CATEGORY_INFORMATION = "informational";
+	public static String CATEGORY_COLORS = "color codes";
+	
 	public static Property talkRange, minHealthFactor, minHunger, requireHealthFactor, requireHunger;
+	
+	public static Property healthMessage, foodMessage, defaultHealthMessage, defaultFoodMessage;
+	public static Property enableHealthMessage, enableFoodMessage;
 
+	public static Property bracketColor, angleBraceColor, posColor, nameColor, bodyColor, defaultColor, errorColor, usageColor;
+	
 	// Call this from CommonProxy.preInit(). It will create our config if it doesn't
 	// exist yet and read the values if it does exist.
 	public static void readConfig() {
@@ -42,6 +49,31 @@ public class Config {
 		
 		requireHunger = cfg.get(CATEGORY_RESTRICTIONS, "requireHunger", true, "Enable actually needing hunger saturation before being able to shout.");
 		minHunger = cfg.get(CATEGORY_RESTRICTIONS, "minHunger", 5, "Hunger is 20 integer (whole number) units, set this to the hunger cost per shout. The higher the number the less they can shout.");
+		
+		cfg.addCustomCategoryComment(CATEGORY_INFORMATION, "Informational");
+		cfg.addCustomCategoryComment(CATEGORY_INFORMATION, "Applied when certain conditions are met, for instance when not enough health or saturation");
+		
+		healthMessage = cfg.get(CATEGORY_INFORMATION, "healthMessage", "You are too weak to shout!", "The message could be anything! It could be a link to your discord! or Buycraft! Anything at all!");
+		enableHealthMessage = cfg.get(CATEGORY_INFORMATION, "enableHealthMessage", true, "Enable this to display the health message");
+		
+		foodMessage = cfg.get(CATEGORY_INFORMATION, "foodMessage", "You are too hungry to shout!", "The message could be anything! It could be a link to your discord! or Buycraft! Anything at all!");
+		enableFoodMessage = cfg.get(CATEGORY_INFORMATION, "enableFoodMessage", true, "Enable this to display the health message");
+		
+		defaultHealthMessage = cfg.get(CATEGORY_INFORMATION, "defaultHealthMessage", "You can barely think to shout due to your weakness!","This displays the enableHealthMessage is false. Can be anything.");
+		defaultFoodMessage = cfg.get(CATEGORY_INFORMATION, "defaultFoodMessage", "You try to shout but all your hear is your stomach growling!", "If enabledFoodMessage is false this will display. Can be anything.");
+		
+		cfg.addCustomCategoryComment(CATEGORY_COLORS, "Color Codes");
+		cfg.addCustomCategoryComment(CATEGORY_COLORS, "These codes control the output of the colors sent to the client for the various parts of the mod");
+		cfg.addCustomCategoryComment(CATEGORY_COLORS, "Color codes reference at http://minecraft.wikia.com/wiki/Formatting_Codes");
+		
+		bracketColor = cfg.get(CATEGORY_COLORS, "bracketColor", "§6", "Sets the color for brackets []");
+		angleBraceColor = cfg.get(CATEGORY_COLORS, "angleBracecolor", "§7", "Sets the color for angle braces <>");
+		posColor = cfg.get(CATEGORY_COLORS, "posColor","§e","Sets the color for positional information");
+		nameColor = cfg.get(CATEGORY_COLORS, "nameColor", "§f", "Sets the color to be used player names");
+		bodyColor = cfg.get(CATEGORY_COLORS, "bodyColor","§f","Sets the color the body of the message");
+		defaultColor = cfg.get(CATEGORY_COLORS, "defaultColor", "§f","The color to use when no other color will do");
+		errorColor = cfg.get(CATEGORY_COLORS, "errorColor", "§4","The color to use when an error is issued");
+		usageColor = cfg.get(CATEGORY_COLORS, "usageColor", "§2","The color to use for the usage text");
 	}
 
 }
