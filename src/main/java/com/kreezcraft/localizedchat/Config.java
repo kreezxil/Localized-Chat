@@ -67,7 +67,7 @@ public class Config {
 		cfg.addCustomCategoryComment(CATEGORY_COLORS, "Color codes reference at http://minecraft.wikia.com/wiki/Formatting_Codes");
 		
 		bracketColor = cfg.get(CATEGORY_COLORS, "bracketColor", "§6", "Sets the color for brackets []");
-		angleBraceColor = cfg.get(CATEGORY_COLORS, "angleBracecolor", "§7", "Sets the color for angle braces <>");
+		angleBraceColor = cfg.get(CATEGORY_COLORS, "angleBraceColor", "§7", "Sets the color for angle braces <>");
 		posColor = cfg.get(CATEGORY_COLORS, "posColor","§e","Sets the color for positional information");
 		nameColor = cfg.get(CATEGORY_COLORS, "nameColor", "§f", "Sets the color to be used player names");
 		bodyColor = cfg.get(CATEGORY_COLORS, "bodyColor","§f","Sets the color the body of the message");
