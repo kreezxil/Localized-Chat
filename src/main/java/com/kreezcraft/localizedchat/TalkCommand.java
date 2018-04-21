@@ -97,8 +97,8 @@ public class TalkCommand extends CommandBase{
 	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_GREEN + "Use /talk <blockRange> <Message... ...>"));
 	            return;
 	        }
-	        if (range > 100.0){
-	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_RED + "Not a chance you can only talk as far out as 100 blocks"));
+	        if (range > Config.talkRange.getInt()){
+	            player.sendMessage(new TextComponentString( ChatFormatting.DARK_RED + "Not a chance you can only talk as far out as "+Config.talkRange.getInt()+" blocks"));
 	            return;
 	        }
 	        StringBuilder strBuilder = new StringBuilder();

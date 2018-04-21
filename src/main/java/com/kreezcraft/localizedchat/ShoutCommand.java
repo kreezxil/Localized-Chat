@@ -87,9 +87,20 @@ public class ShoutCommand extends CommandBase {
 			player.sendMessage(new TextComponentString(ChatFormatting.DARK_GREEN + "Use /shout <Message... ...>"));
 			return;
 		}
-
-		double range = 50;
-
+		if(Config.requireHealthFactor.getBoolean() && player.getHealth() < player.getMaxHealth()/4) {
+			player.sendMessage(new TextComponentString(ChatFormatting.RED + "You are to weak to shout!"));
+			return;
+		}
+		
+		if(Config.requireHunger.getBoolean() && player.getFoodStats().getFoodLevel() < Config.minHunger.getInt()) {
+			player.sendMessage(new TextComponentString(ChatFormatting.AQUA + "You are too hungry to shout!"));
+			return;
+		} else {
+			if(Config.requireHunger.getBoolean()) {
+				player.getFoodStats().setFoodLevel(player.getFoodStats().getFoodLevel()-Config.minHunger.getInt());
+			}
+		}
+		
 		StringBuilder strBuilder = new StringBuilder();
 
 		for (String word : args) {

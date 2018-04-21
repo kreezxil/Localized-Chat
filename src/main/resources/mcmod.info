@@ -1,14 +1,14 @@
 [
 {
-  "modid": "WhisperingShout",
-  "name": "Whispering Shout",
-  "description": "A regional chat mod that includes shouting.",
+  "modid": "localizedchat",
+  "name": "Localized Chat",
+  "description": "A local chat mod that includes shouting.",
   "version": "${version}",
   "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": ["oliver276"],
-  "credits": "A little Youtube",
+  "authorList": ["kreezxil"],
+  "credits": "oliver276 for the original WhisperingShout_Forge version for 1.7.10",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
