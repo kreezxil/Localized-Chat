@@ -16,12 +16,16 @@ public class Config {
 	public static String CATEGORY_INFORMATION = "informational";
 	public static String CATEGORY_COLORS = "color codes";
 	
+	public static String CATEGORY_CHANNELS = "channel settings";
+	
 	public static Property talkRange, minHealthFactor, minHunger, requireHealthFactor, requireHunger;
 	
 	public static Property healthMessage, foodMessage, defaultHealthMessage, defaultFoodMessage;
 	public static Property enableHealthMessage, enableFoodMessage;
 
-	public static Property bracketColor, angleBraceColor, posColor, nameColor, bodyColor, defaultColor, errorColor, usageColor;
+	public static Property bracketColor, angleBraceColor, posColor, nameColor, bodyColor, defaultColor, errorColor, usageColor, channelColor;
+	
+	public static Property enableChannels, chanList;
 	
 	// Call this from CommonProxy.preInit(). It will create our config if it doesn't
 	// exist yet and read the values if it does exist.
@@ -74,6 +78,13 @@ public class Config {
 		defaultColor = cfg.get(CATEGORY_COLORS, "defaultColor", "§f","The color to use when no other color will do");
 		errorColor = cfg.get(CATEGORY_COLORS, "errorColor", "§4","The color to use when an error is issued");
 		usageColor = cfg.get(CATEGORY_COLORS, "usageColor", "§2","The color to use for the usage text");
+		channelColor = cfg.get(CATEGORY_COLORS, "channelColor", "§2", "The color to use for channel names");
+		
+		cfg.addCustomCategoryComment(CATEGORY_CHANNELS, "Channel Settings");
+		cfg.addCustomCategoryComment(CATEGORY_CHANNELS, "Using this section overrides the chat restriction section, it's mechanics, and turns regular talk into the dimension chat");
+		
+		enableChannels = cfg.get(CATEGORY_CHANNELS, "enableChannels", true, "Allows channels if true");
+		chanList = cfg.get(CATEGORY_CHANNELS, "chanList", new String[] {"server","market"},"Channel names to use with /chat");
 	}
 
 }
