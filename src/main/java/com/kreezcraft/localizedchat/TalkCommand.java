@@ -92,6 +92,8 @@ public class TalkCommand extends CommandBase {
 
 		double range = 0;
 
+		if(!Config.enableChannels.getBoolean()) {
+
 		try {
 			range = Double.valueOf(args[0]);
 		} catch (Exception e) {
@@ -107,7 +109,8 @@ public class TalkCommand extends CommandBase {
 					+ Config.talkRange.getInt() + Config.errorColor.getString() + " blocks"));
 			return;
 		}
-
+		}
+		
 		StringBuilder strBuilder = new StringBuilder();
 		boolean done1stword = false;
 
@@ -124,6 +127,8 @@ public class TalkCommand extends CommandBase {
 		List playerEntities = workingWorld.playerEntities;
 		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
 
+		String dimChan = workingWorld.getProviderName(); //the dim name hopefully 
+
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
 			if (!Config.enableChannels.getBoolean()) {
@@ -139,7 +144,7 @@ public class TalkCommand extends CommandBase {
 			} else {
 				// now it's just plain old dim chat
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(
-						Config.bracketColor.getString() + "[" + Config.defaultColor.getString() + "From "
+						Config.bracketColor.getString() + "[" + Config.defaultColor.getString() + dimChan
 						// + Config.posColor.getString() +
 						// compareCoordinatesDistance(mainPlayer.getPosition(),
 						// comparePlayer.getPosition())

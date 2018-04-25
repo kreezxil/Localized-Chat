@@ -83,8 +83,8 @@ public class Config {
 		cfg.addCustomCategoryComment(CATEGORY_CHANNELS, "Channel Settings");
 		cfg.addCustomCategoryComment(CATEGORY_CHANNELS, "Using this section overrides the chat restriction section, it's mechanics, and turns regular talk into the dimension chat");
 		
-		enableChannels = cfg.get(CATEGORY_CHANNELS, "enableChannels", true, "Allows channels if true");
-		chanList = cfg.get(CATEGORY_CHANNELS, "chanList", new String[] {"server","market"},"Channel names to use with /chat");
+		enableChannels = cfg.get(CATEGORY_CHANNELS, "enableChannels", true, "Allows channels if true, overrides chat restrictions if enabled.");
+		chanList = cfg.get(CATEGORY_CHANNELS, "chanList", new String[] {"server","market"},"Global channel names to use with /chat, currently there is no channel buffer so this is the same as switch radio stations or tv stations");
 	}
 
 }
