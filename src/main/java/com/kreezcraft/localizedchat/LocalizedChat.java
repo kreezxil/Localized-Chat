@@ -15,6 +15,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -30,6 +31,10 @@ import java.io.File;
 import java.util.Random;
 
 import org.apache.logging.log4j.Logger;
+
+import com.kreezcraft.localizedchat.Channels.Channel;
+import com.kreezcraft.localizedchat.Channels.ChannelStorage;
+import com.kreezcraft.localizedchat.Channels.IChannel;
 
 
 @Mod(modid = LocalizedChat.MODID, version = LocalizedChat.VERSION, name = LocalizedChat.NAME, acceptableRemoteVersions = "*")
@@ -55,6 +60,7 @@ public class LocalizedChat
     public void init(FMLInitializationEvent event)
     {
         MinecraftForge.EVENT_BUS.register(new ChatListener());
+        CapabilityManager.INSTANCE.register(IChannel.class, new ChannelStorage(), Channel.class);
     }
 
 
