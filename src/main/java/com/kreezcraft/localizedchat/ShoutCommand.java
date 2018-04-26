@@ -81,7 +81,10 @@ public class ShoutCommand extends CommandBase {
 			// what's the purpose of this?
 			return;
 		}
-
+		if(!Config.enableChannels.getBoolean()) {
+			player.sendMessage(new TextComponentString(Config.errorColor.getString()+"Global chat is enabled, so please use /chan list for channels"));
+			return;
+		}
 		if (args.length < 1) {
 			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
 			player.sendMessage(new TextComponentString(Config.usageColor.getString() + "Use /shout <Message... ...>"));

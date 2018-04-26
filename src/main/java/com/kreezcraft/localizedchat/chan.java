@@ -89,6 +89,15 @@ public class chan extends CommandBase {
 			return;
 		}
 
+		if(args[1].toString().toLowerCase().equals("list")) {
+			player.sendMessage(new TextComponentString(Config.usageColor.getString()+"Available channels are:\n"));
+		
+			for (String channel : Config.chanList.getStringList()) {
+				player.sendMessage(new TextComponentString(Config.channelColor.getString()+channel));
+			}
+			return;
+		}
+		
 		StringBuilder strBuilder = new StringBuilder();
 		boolean done1stword = false;
 
