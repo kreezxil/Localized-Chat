@@ -50,7 +50,19 @@ public class ShoutCommand extends CommandBase {
 
 	@Override
 	public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
+
+		// is opOnlyShout enabled? is the sender an Op
+		if (Config.opOnlyShout.getBoolean()) {
+			if (server.getPlayerList().getOppedPlayers().getGameProfileFromName(sender.getName()) != null) {
+				return true;
+			} else {
+				return false;
+			}
+		} 
+		
+		//if we got here then everyone is allowed to show
 		return true;
+
 	}
 
 	@Override
@@ -81,8 +93,9 @@ public class ShoutCommand extends CommandBase {
 			// what's the purpose of this?
 			return;
 		}
-		if(!Config.enableChannels.getBoolean()) {
-			player.sendMessage(new TextComponentString(Config.errorColor.getString()+"Global chat is enabled, so please use /chan list for channels"));
+		if (!Config.enableChannels.getBoolean()) {
+			player.sendMessage(new TextComponentString(
+					Config.errorColor.getString() + "Global chat is enabled, so please use /chan list for channels"));
 			return;
 		}
 		if (args.length < 1) {
@@ -136,10 +149,8 @@ public class ShoutCommand extends CommandBase {
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
 			((EntityPlayerMP) name).sendMessage(new TextComponentString(
-					Config.angleBraceColor.getString() + "<"
-					+ Config.nameColor.getString() + player.getName() 
-					+ Config.angleBraceColor.getString() + "> " 
-					+ Config.bodyColor.getString() + message));
+					Config.angleBraceColor.getString() + "<" + Config.nameColor.getString() + player.getName()
+							+ Config.angleBraceColor.getString() + "> " + Config.bodyColor.getString() + message));
 		}
 	}
 

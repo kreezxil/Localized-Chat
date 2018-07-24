@@ -25,7 +25,7 @@ public class Config {
 
 	public static Property bracketColor, angleBraceColor, posColor, nameColor, bodyColor, defaultColor, errorColor, usageColor, channelColor;
 	
-	public static Property enableChannels, chanList;
+	public static Property enableChannels, chanList, opOnlyShout;
 	
 	// Call this from CommonProxy.preInit(). It will create our config if it doesn't
 	// exist yet and read the values if it does exist.
@@ -45,9 +45,10 @@ public class Config {
 	private static void initGeneralConfig(Configuration cfg) {
 		cfg.addCustomCategoryComment(CATEGORY_RESTRICTIONS, "Chat Restrictions");
 		
-		cfg.addCustomCategoryComment(CATEGORY_RESTRICTIONS, "talkRange doesn't will not have a toggle value, because then the mod would be useless");
+	    cfg.addCustomCategoryComment(CATEGORY_RESTRICTIONS, "talkRange doesn't have a toggle value, because then the mod would be useless");
 		talkRange = cfg.get(CATEGORY_RESTRICTIONS, "talkRange", 1000, "The maximum range at which a player local to another player can be heard without requiring shouting.");
-
+		opOnlyShout = cfg.get(CATEGORY_RESTRICTIONS, "opOnlyShout", false, "If true only ops can shout.");
+		
 		requireHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "requireHealthFactor", false, "Enable actually needing health to perform a shout.");
 		minHealthFactor = cfg.get(CATEGORY_RESTRICTIONS, "minHealthFactor", 2, "The factor by which the health bar is divided and thus the minimum health required before a player can shout to the server");
 		
