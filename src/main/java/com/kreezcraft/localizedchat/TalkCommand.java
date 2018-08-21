@@ -84,7 +84,7 @@ public class TalkCommand extends CommandBase {
 			return;
 		}
 
-		if (args.length < 2) {
+		if (!Config.enableChannels.getBoolean() && args.length < 2) {
 			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
 			player.sendMessage(new TextComponentString(getUsage(sender)));
 			return;
