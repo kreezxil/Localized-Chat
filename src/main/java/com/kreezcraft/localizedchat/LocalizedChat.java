@@ -35,41 +35,39 @@ import org.apache.logging.log4j.Logger;
 import com.kreezcraft.localizedchat.Channels.Channel;
 import com.kreezcraft.localizedchat.Channels.ChannelStorage;
 import com.kreezcraft.localizedchat.Channels.IChannel;
-
+import com.kreezcraft.localizedchat.commands.ChanList;
+import com.kreezcraft.localizedchat.commands.DimChat;
+import com.kreezcraft.localizedchat.commands.TalkChat;
+import com.kreezcraft.localizedchat.commands.WorldChat;
 
 @Mod(modid = LocalizedChat.MODID, version = LocalizedChat.VERSION, name = LocalizedChat.NAME, acceptableRemoteVersions = "*")
-public class LocalizedChat
-{
-    public static final String MODID = "localizedchat";
+public class LocalizedChat {
+	public static final String MODID = "localizedchat";
 	public static final String NAME = "Localized Chat";
-    public static final String VERSION = "@VERSION@";
-    
-    public static Logger logger;
-    public static Configuration config;
-    public static LocalizedChat instance;
-    
+	public static final String VERSION = "@VERSION@";
+
+	public static Logger logger;
+	public static LocalizedChat instance;
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
-		File directory = event.getModConfigurationDirectory();
-		config = new Configuration(new File(directory.getPath(), "localizedchat.cfg"));
-		Config.readConfig();
 	}
 
 	@EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        MinecraftForge.EVENT_BUS.register(new ChatListener());
-        CapabilityManager.INSTANCE.register(IChannel.class, new ChannelStorage(), Channel.class);
-    }
+	public void init(FMLInitializationEvent event) {
+		MinecraftForge.EVENT_BUS.register(new ChatListener());
 
+		// not sure I need this -- kreezxil January 30, 2019
+		CapabilityManager.INSTANCE.register(IChannel.class, new ChannelStorage(), Channel.class);
+	}
 
-
-    @EventHandler
-    public void serverLoad(FMLServerStartingEvent event)
-    {
-        event.registerServerCommand(new TalkCommand());
-        event.registerServerCommand(new ShoutCommand());
-    }
+	@EventHandler
+	public void serverLoad(FMLServerStartingEvent event) {
+		event.registerServerCommand(new TalkChat());
+		event.registerServerCommand(new WorldChat());
+		event.registerServerCommand(new DimChat());
+		event.registerServerCommand(new ChanList());
+	}
 
 }

@@ -2,7 +2,7 @@ package com.kreezcraft.localizedchat.Channels;
 
 import java.util.Arrays;
 
-import com.kreezcraft.localizedchat.Config;
+import com.kreezcraft.localizedchat.ChatConfig;
 
 public class Channel implements IChannel {
 	
@@ -15,11 +15,17 @@ public class Channel implements IChannel {
 
 	@Override
 	public boolean setChannel(String channel) {
-		if(Arrays.asList(Config.chanList.getStringList()).contains(channel)) {
-			station = channel;
-			return true;
-		}
+		// TODO Auto-generated method stub
 		return false;
 	}
+
+//	@Override
+//	public boolean setChannel(String channel) {
+//		if(Arrays.asList(ChatConfig.channels..chanList.getStringList()).contains(channel)) {
+//			station = channel;
+//			return true;
+//		}
+//		return false;
+//	}
 
 }

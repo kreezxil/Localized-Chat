@@ -1,4 +1,4 @@
-package com.kreezcraft.localizedchat;
+package com.kreezcraft.localizedchat.commands;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -24,12 +24,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.kreezcraft.localizedchat.ChatConfig;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
-public class chan extends CommandBase {
+public class ChanList extends CommandBase {
 	private List aliases;
 
-	public chan() {
+	public ChanList() {
 		this.aliases = new ArrayList();
 		this.aliases.add("chan");
 		this.aliases.add("global");
@@ -43,10 +44,10 @@ public class chan extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		if (Config.enableChannels.getBoolean()) {
-			return Config.usageColor.getString() + "Channel chat\nchan <channel> message\nchan list - for channels";
+		if (ChatConfig.channels.enableChannels) {
+			return ChatConfig.colorCodes.usageColor + "Channel chat\nchan <channel> message\nchan list - for channels";
 		}
-		return Config.usageColor.getString() + "Channels not enabled";
+		return ChatConfig.colorCodes.usageColor + "Channels not enabled";
 	}
 
 	@Override
@@ -78,23 +79,24 @@ public class chan extends CommandBase {
 			return;
 		}
 
-		if (!Config.enableChannels.getBoolean()) {
+		if (!ChatConfig.channels.enableChannels) {
 			player.sendMessage(new TextComponentString(getUsage(sender)));
 			return;
 		}
 
 		if (args.length < 2) {
-			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
+			player.sendMessage(new TextComponentString(ChatConfig.colorCodes.errorColor + "Invalid arguments."));
 			player.sendMessage(new TextComponentString(getUsage(sender)));
 			return;
 		}
 
 		if(args[1].toString().toLowerCase().equals("list")) {
-			player.sendMessage(new TextComponentString(Config.usageColor.getString()+"Available channels are:\n"));
+			player.sendMessage(new TextComponentString(ChatConfig.colorCodes.usageColor+"Available channels are:\n"));
 		
-			for (String channel : Config.chanList.getStringList()) {
-				player.sendMessage(new TextComponentString(Config.channelColor.getString()+channel));
-			}
+//			for (String channel : ChatConfig.channels.chanList.getStringList()) {
+//				player.sendMessage(new TextComponentString(ChatConfig.colorCodes.channelColor+channel));
+//			}
+			player.sendMessage(new TextComponentString(ChatConfig.colorCodes.channelColor+"Dim\nWorld\n"));
 			return;
 		}
 		
@@ -123,10 +125,10 @@ public class chan extends CommandBase {
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
 			targetPlayer = (EntityPlayer) name.getClass().cast(targetPlayer);
-			targetPlayer.sendMessage(new TextComponentString(Config.bracketColor.getString() + "["
-					+ Config.channelColor.getString() + "Global Out-Of-Character Chat" + Config.bracketColor.getString()
-					+ "] " + Config.angleBraceColor.getString() + "<" + Config.nameColor.getString()
-					+ targetPlayer.getName() + Config.angleBraceColor.getString() + "> " + Config.bodyColor.getString()
+			targetPlayer.sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
+					+ ChatConfig.colorCodes.channelColor + "Global Out-Of-Character Chat" + ChatConfig.colorCodes.bracketColor
+					+ "] " + ChatConfig.colorCodes.angleBraceColor + "<" + ChatConfig.colorCodes.nameColor
+					+ targetPlayer.getName() + ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor
 					+ message));
 
 		} // end for

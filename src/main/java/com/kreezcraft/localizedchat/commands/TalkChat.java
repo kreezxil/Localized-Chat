@@ -1,4 +1,4 @@
-package com.kreezcraft.localizedchat;
+package com.kreezcraft.localizedchat.commands;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -22,12 +22,13 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.kreezcraft.localizedchat.ChatConfig;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
-public class TalkCommand extends CommandBase {
+public class TalkChat extends CommandBase {
 	private List aliases;
 
-	public TalkCommand() {
+	public TalkChat() {
 		this.aliases = new ArrayList();
 		this.aliases.add("talk");
 		this.aliases.add("speak");
@@ -42,10 +43,7 @@ public class TalkCommand extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		if (Config.enableChannels.getBoolean()) {
-			return Config.usageColor.getString() + "Dimension chat\ntalk <text>";
-		}
-		return Config.usageColor.getString() + "talk <range> <text>";
+		return ChatConfig.colorCodes.usageColor + "talk <range> <text>";
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class TalkCommand extends CommandBase {
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		
+
 		EntityPlayer player;
 
 		if (sender instanceof EntityPlayer) {
@@ -84,33 +82,33 @@ public class TalkCommand extends CommandBase {
 			return;
 		}
 
-		if (!Config.enableChannels.getBoolean() && args.length < 2) {
-			player.sendMessage(new TextComponentString(Config.errorColor.getString() + "Invalid arguments."));
+		if (!ChatConfig.channels.enableChannels && args.length < 2) {
+			player.sendMessage(new TextComponentString(ChatConfig.colorCodes.errorColor + "Invalid arguments."));
 			player.sendMessage(new TextComponentString(getUsage(sender)));
 			return;
 		}
 
 		double range = 0;
 
-		if(!Config.enableChannels.getBoolean()) {
+		if (!ChatConfig.channels.enableChannels) {
 
-		try {
-			range = Double.valueOf(args[0]);
-		} catch (Exception e) {
-			player.sendMessage(
-					new TextComponentString(Config.errorColor.getString() + "Not a recognised number: " + args[0]));
-			player.sendMessage(new TextComponentString(getUsage(sender)));
-			return;
+			try {
+				range = Double.valueOf(args[0]);
+			} catch (Exception e) {
+				player.sendMessage(new TextComponentString(
+						ChatConfig.colorCodes.errorColor + "Not a recognised number: " + args[0]));
+				player.sendMessage(new TextComponentString(getUsage(sender)));
+				return;
+			}
+
+			if (range > ChatConfig.restrictions.talkRange) {
+				player.sendMessage(new TextComponentString(ChatConfig.colorCodes.errorColor
+						+ "Not a chance you can only talk as far out as " + ChatConfig.colorCodes.posColor
+						+ ChatConfig.restrictions.talkRange + ChatConfig.colorCodes.errorColor + " blocks"));
+				return;
+			}
 		}
 
-		if (range > Config.talkRange.getInt()) {
-			player.sendMessage(new TextComponentString(Config.errorColor.getString()
-					+ "Not a chance you can only talk as far out as " + Config.posColor.getString()
-					+ Config.talkRange.getInt() + Config.errorColor.getString() + " blocks"));
-			return;
-		}
-		}
-		
 		StringBuilder strBuilder = new StringBuilder();
 		boolean done1stword = false;
 
@@ -127,34 +125,33 @@ public class TalkCommand extends CommandBase {
 		List playerEntities = workingWorld.playerEntities;
 		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByName(player.getName());
 
-		String dimChan = workingWorld.getProviderName(); //the dim name hopefully 
+		String dimChan = workingWorld.getProviderName(); // the dim name hopefully
 
 		for (Object name : playerEntities) {
 			EntityPlayer comparePlayer = (workingWorld.getPlayerEntityByName(((EntityPlayerMP) name).getName()));
-			if (!Config.enableChannels.getBoolean()) {
+			if (!ChatConfig.channels.enableChannels) {
 				// dim chat with range checking
 				if (compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition()) <= range) {
-					((EntityPlayerMP) name).sendMessage(new TextComponentString(Config.bracketColor.getString() + "["
-							+ Config.defaultColor.getString() + "From " + Config.posColor.getString()
+					((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
+							+ ChatConfig.colorCodes.defaultColor + "From " + ChatConfig.colorCodes.posColor
 							+ compareCoordinatesDistance(mainPlayer.getPosition(), comparePlayer.getPosition())
-							+ Config.defaultColor.getString() + " blocks away" + Config.bracketColor.getString() + "] "
-							+ Config.angleBraceColor.getString() + "<" + Config.nameColor.getString() + player.getName()
-							+ Config.angleBraceColor.getString() + "> " + Config.bodyColor.getString() + message));
-				} //end if
+							+ ChatConfig.colorCodes.defaultColor + " blocks away" + ChatConfig.colorCodes.bracketColor
+							+ "] " + ChatConfig.colorCodes.angleBraceColor + "<" + ChatConfig.colorCodes.nameColor
+							+ player.getName() + ChatConfig.colorCodes.angleBraceColor + "> "
+							+ ChatConfig.colorCodes.bodyColor + message));
+				} // end if
 			} else {
 				// now it's just plain old dim chat
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(
-						Config.bracketColor.getString() + "[" + Config.defaultColor.getString() + dimChan
-						// + Config.posColor.getString() +
-						// compareCoordinatesDistance(mainPlayer.getPosition(),
-						// comparePlayer.getPosition())
-						// + Config.defaultColor.getString() + " blocks away"
-								+ Config.bracketColor.getString() + "] " + Config.angleBraceColor.getString() + "<"
-								+ Config.nameColor.getString() + player.getName() + Config.angleBraceColor.getString()
-								+ "> " + Config.bodyColor.getString() + message));
-			} //end else
+						ChatConfig.colorCodes.bracketColor + "[" + ChatConfig.colorCodes.defaultColor + dimChan
+						
+								+ ChatConfig.colorCodes.bracketColor + "] " + ChatConfig.colorCodes.angleBraceColor
+								+ "<" + ChatConfig.colorCodes.nameColor + player.getName()
+								+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor
+								+ message));
+			} // end else
 
-		} //end for
-		
-	} //end execute
+		} // end for
+
+	} // end execute
 }
