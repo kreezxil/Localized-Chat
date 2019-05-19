@@ -1,16 +1,8 @@
 package com.kreezcraft.localizedchat;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.logging.log4j.Level;
-
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -23,73 +15,39 @@ public class ChatConfig {
 	@Config.Name("Restrictions")
 	public static Restrictions restrictions = new Restrictions();
 
-	@Config.Comment({ "Informational Messages",
-			"Applied when certain conditions are met, for instance when not enough health or saturation" })
-	@Config.Name("Messages")
-	public static Informational informational = new Informational();
+@Config.Name("Miscellaneous")
+public static Miscellaneous miscellaneous = new Miscellaneous();
 
 	@Config.Comment({
 			"These codes control the output of the colors sent to the client for the various parts of the mod",
 			"Color codes reference at http://minecraft.wikia.com/wiki/Formatting_Codes" })
 	@Config.Name("Color Codes")
 	public static ColorCodes colorCodes = new ColorCodes();
-
-	@Config.Name("Channel Settings")
-	@Config.Comment({
-			"Using this section overrides the chat restriction section, it's mechanics, and turns regular talk into the dimension chat" })
-	public static Channels channels = new Channels();
-
+	
 	public static class Restrictions {
 
 		@Config.Comment({
-				"The maximum range at which a player local to another player can be heard without requiring shouting.",
-				"Default: 1000" })
+				"The maximum range at which a player local to another player can be heard without requiring being an op.",
+				"Default: 100" })
 		@Config.Name("Range")
-		public int talkRange = 1000;
+		public int talkRange = 100;
 
-		@Config.Comment({ "Set to false to treat operators like players. Aka talking hits the entire world", "Default: false" })
-		@Config.Name("Operator Override")
-		public boolean opOverride = false;
-
-		@Config.Comment({ "Enable actually needing health to perform a shout." })
-		@Config.Name("requireHealthFactor")
-		public boolean requireHealthFactor = false;
-
-		@Config.Comment({
-				"The factor by which the health bar is divided and thus the minimum health required before a player can shout to the server",
-				"Default: 2" })
-		@Config.Name("minHealthFactor")
-		public int minHealthFactor = 2;
-
-		@Config.Comment({ "Enable actually needing hunger saturation before being able to shout." })
-		@Config.Name("requireHunger")
-		public boolean requireHunger = true;
-
-		@Config.Comment({
-				"Hunger is 20 integer (whole number) units, set this to the hunger cost per shout. The higher the number the less they can shout." })
-		@Config.Name("minHunger")
-		public int minHunger = 5;
-	}
-
-	public static class Informational {
-		@Config.Comment({ "Enable this to display the health message", "Default: true" })
-		@Config.Name("Should the low health message be enabled?")
-		public boolean enableHealthMessage = true;
-
-		@Config.Comment({ "The message to say when health requirement is enabled and the player is too weak to shout" })
-		@Config.Name("Health Message")
-		public String healthMessage = "You are too weak to shout!";
-
-		@Config.Comment({ "Enable this to display the health message" })
-		@Config.Name("Should the low hunger message be enabled?")
-		public boolean enableFoodMessage = true;
-
-		@Config.Comment({ "The message to say when the player is too hungry" })
-		@Config.Name("Hunger Message")
-		public String foodMessage = "You are too hungry to shout!";
+		@Config.Comment({ "Set to true to treat operators like players. Aka talking hits the entire world", "Default: false" })
+		@Config.Name("Operator as Players")
+		public boolean opAsPlayer = false;
 
 	}
 
+	public static class Miscellaneous {
+		@Config.Comment({"If alternate prefix is enabled then the distance won't be displayed but this prefix will."})
+		@Config.Name("Alternate Prefix")
+		public String prefix = "";
+		
+		@Config.Comment({"Enable to use the prefix you set above"})
+		@Config.Name("Default Prefix Override")
+		public boolean usePrefix = false;
+	}
+	
 	public static class ColorCodes {
 		@Config.Comment({ "Sets the color for brackets []" })
 		@Config.Name("Bracket Color:")
@@ -126,12 +84,6 @@ public class ChatConfig {
 		@Config.Comment({ "The color to use for channel names" })
 		@Config.Name("Channel Name Color")
 		public String channelColor = "§2";
-	}
-
-	public static class Channels {
-		@Config.Comment({ "Enables the channels Dim and World.", "Default: true" })
-		@Config.Name("Enable Channels")
-		public boolean enableChannels = true;
 	}
 
 	@SubscribeEvent
