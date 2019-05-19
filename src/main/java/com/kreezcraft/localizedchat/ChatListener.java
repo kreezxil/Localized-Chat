@@ -72,7 +72,7 @@ public class ChatListener {
 			}
 
 		} // end for
-		event.setCanceled(true);
+		//event.setCanceled(true); //didn't need this at all.
 	} // end onchat
 
 	public double compareCoordinatesDistance(BlockPos player1, BlockPos player2) {
