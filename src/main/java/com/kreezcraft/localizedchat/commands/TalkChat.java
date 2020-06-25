@@ -20,12 +20,10 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class TalkChat extends CommandBase {
-	@SuppressWarnings("rawtypes")
-	private List aliases;
+	private List<String> aliases;
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public TalkChat() {
-		this.aliases = new ArrayList();
+		this.aliases = new ArrayList<String>();
 		this.aliases.add("shout");
 		this.aliases.add("t");
 	}
@@ -40,7 +38,6 @@ public class TalkChat extends CommandBase {
 		return ChatConfig.colorCodes.usageColor + "talk <range> <text>";
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	@Nonnull
 	public List<String> getAliases() {

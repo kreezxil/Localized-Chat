@@ -33,17 +33,20 @@ public class ChatListener {
 		World workingWorld = event.getPlayer().getEntityWorld();
 		MinecraftServer server = workingWorld.getMinecraftServer();
 		List<EntityPlayer> playerEntities = workingWorld.playerEntities;
-		EntityPlayer mainPlayer = workingWorld
-				.getPlayerEntityByUUID(event.getPlayer().getCommandSenderEntity().getUniqueID());
-		for (Object name : playerEntities) {
-			EntityPlayer comparePlayer = (workingWorld
-					.getPlayerEntityByUUID(((EntityPlayerMP) name).getCommandSenderEntity().getUniqueID()));
+		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByUUID(event.getPlayer().getCommandSenderEntity().getUniqueID());
+		
+		//System.out.print(mainPlayer.getGameProfile());
+		
+		for (EntityPlayer name : playerEntities) {
+			EntityPlayer comparePlayer = workingWorld.getPlayerEntityByUUID(((EntityPlayerMP) name).getCommandSenderEntity().getUniqueID());
 			if (mainPlayer == comparePlayer) { // handles local echo
+				
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.angleBraceColor + "<"
 						+ ChatConfig.colorCodes.nameColor + playerName(mainPlayer, event)
 						+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor + message));
-			} else if (!ChatConfig.restrictions.opAsPlayer && (server.getPlayerList().getOppedPlayers()
-					.getGameProfileFromName(mainPlayer.getName()) != null)) { // handles ops chatting to everyone
+				
+			} else if (!ChatConfig.restrictions.opAsPlayer && mainPlayer != null && (server.getPlayerList().getOppedPlayers().getEntry(mainPlayer.getGameProfile()) != null)) {
+				// handles ops chatting to everyone
 				((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
 						+ ChatConfig.colorCodes.defaultColor
 						+ ((ChatConfig.miscellaneous.usePrefix) ? ChatConfig.miscellaneous.prefix
@@ -54,25 +57,24 @@ public class ChatListener {
 						+ ChatConfig.colorCodes.bracketColor + "] " + ChatConfig.colorCodes.angleBraceColor + "<"
 						+ ChatConfig.colorCodes.nameColor + playerName(mainPlayer, event)
 						+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor + message));
-			} else { // handles normal player
-				if (compareCoordinatesDistance(mainPlayer.getPosition(),
-						comparePlayer.getPosition()) <= (double) range) {
+			} else { // handles normal player and/or customNPC
+				if (compareCoordinatesDistance(event.getPlayer().getPosition(), comparePlayer.getPosition()) <= (double) range) {
 					((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
 							+ ChatConfig.colorCodes.defaultColor
 							+ ((ChatConfig.miscellaneous.usePrefix) ? ChatConfig.miscellaneous.prefix
 									: "From " + ChatConfig.colorCodes.posColor
-											+ compareCoordinatesDistance(mainPlayer.getPosition(),
+											+ compareCoordinatesDistance(event.getPlayer().getPosition(),
 													comparePlayer.getPosition())
 											+ ChatConfig.colorCodes.defaultColor + " blocks away")
 							+ ChatConfig.colorCodes.bracketColor + "] " + ChatConfig.colorCodes.angleBraceColor + "<"
-							+ ChatConfig.colorCodes.nameColor + playerName(mainPlayer, event)
+							+ ChatConfig.colorCodes.nameColor + playerName(event.getPlayer(), event)
 							+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor
 							+ message));
 				} // end if
 			}
 
 		} // end for
-		//event.setCanceled(true); //didn't need this at all.
+		event.setCanceled(true); //Required for CustomNPC Support
 	} // end onchat
 
 	public double compareCoordinatesDistance(BlockPos player1, BlockPos player2) {
