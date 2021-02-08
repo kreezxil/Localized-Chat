@@ -1,75 +1,73 @@
 package com.kreezcraft.localizedchat;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.StringTextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 import java.util.List;
 
 public class ChatListener {
 
-	private String playerName(EntityPlayer player, ServerChatEvent event) {
-		NBTTagCompound tag = event.getPlayer().getEntityData();
-		if (tag.hasKey("fakename")) {
-			return tag.getString("fakename");
-		}
+	public static ITextComponent playerName(PlayerEntity player) {
 		if (player.hasCustomName())
-			return player.getCustomNameTag();
-		return player.getDisplayNameString();
+			return player.getCustomName();
+		return player.getDisplayName();
 	}
 
 	@SubscribeEvent
 	public void onChat(ServerChatEvent event) {
 		String message = event.getMessage();
-		int range = ChatConfig.restrictions.talkRange;
+		int range = ChatConfig.SERVER.talkRange.get();
 
 		System.out.println(message);
 		World workingWorld = event.getPlayer().getEntityWorld();
-		MinecraftServer server = workingWorld.getMinecraftServer();
-		List<EntityPlayer> playerEntities = workingWorld.playerEntities;
-		EntityPlayer mainPlayer = workingWorld.getPlayerEntityByUUID(event.getPlayer().getCommandSenderEntity().getUniqueID());
+		MinecraftServer server = workingWorld.getServer();
+		List<? extends PlayerEntity> playerEntities = workingWorld.getPlayers();
+		PlayerEntity mainPlayer = workingWorld.getPlayerByUuid(event.getPlayer().getUniqueID());
 		
 		//System.out.print(mainPlayer.getGameProfile());
-		
-		for (EntityPlayer name : playerEntities) {
-			EntityPlayer comparePlayer = workingWorld.getPlayerEntityByUUID(((EntityPlayerMP) name).getCommandSenderEntity().getUniqueID());
+
+		System.out.println(playerName(mainPlayer).getString());
+		for (PlayerEntity name : playerEntities) {
+			PlayerEntity comparePlayer = workingWorld.getPlayerByUuid(name.getUniqueID());
 			if (mainPlayer == comparePlayer) { // handles local echo
+
+				((ServerPlayerEntity) name).sendMessage(new StringTextComponent(ChatConfig.SERVER.angleBraceColor.get() + "<"
+						+ ChatConfig.SERVER.nameColor.get() + playerName(mainPlayer).getString()
+						+ ChatConfig.SERVER.angleBraceColor.get() + "> " + ChatConfig.SERVER.bodyColor.get() + message), mainPlayer.getUniqueID());
 				
-				((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.angleBraceColor + "<"
-						+ ChatConfig.colorCodes.nameColor + playerName(mainPlayer, event)
-						+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor + message));
-				
-			} else if (!ChatConfig.restrictions.opAsPlayer && mainPlayer != null && (server.getPlayerList().getOppedPlayers().getEntry(mainPlayer.getGameProfile()) != null)) {
+			} else if (!ChatConfig.SERVER.opAsPlayer.get() && mainPlayer != null && (server.getPlayerList().getOppedPlayers().getEntry(mainPlayer.getGameProfile()) != null)) {
 				// handles ops chatting to everyone
-				((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
-						+ ChatConfig.colorCodes.defaultColor
-						+ ((ChatConfig.miscellaneous.usePrefix) ? ChatConfig.miscellaneous.prefix
-								: "From " + ChatConfig.colorCodes.posColor
+				((ServerPlayerEntity) name).sendMessage(new StringTextComponent(ChatConfig.SERVER.bracketColor.get() + "["
+						+ ChatConfig.SERVER.defaultColor.get()
+						+ ((ChatConfig.SERVER.usePrefix.get()) ? ChatConfig.SERVER.prefix.get()
+								: "From " + ChatConfig.SERVER.posColor.get()
 										+ compareCoordinatesDistance(mainPlayer.getPosition(),
 												comparePlayer.getPosition())
-										+ ChatConfig.colorCodes.defaultColor + " blocks away")
-						+ ChatConfig.colorCodes.bracketColor + "] " + ChatConfig.colorCodes.angleBraceColor + "<"
-						+ ChatConfig.colorCodes.nameColor + playerName(mainPlayer, event)
-						+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor + message));
+										+ ChatConfig.SERVER.defaultColor.get() + " blocks away")
+						+ ChatConfig.SERVER.bracketColor.get() + "] " + ChatConfig.SERVER.angleBraceColor.get() + "<"
+						+ ChatConfig.SERVER.nameColor.get() + playerName(mainPlayer).getString()
+						+ ChatConfig.SERVER.angleBraceColor.get() + "> " + ChatConfig.SERVER.bodyColor.get() + message), mainPlayer.getUniqueID());
 			} else { // handles normal player and/or customNPC
 				if (compareCoordinatesDistance(event.getPlayer().getPosition(), comparePlayer.getPosition()) <= (double) range) {
-					((EntityPlayerMP) name).sendMessage(new TextComponentString(ChatConfig.colorCodes.bracketColor + "["
-							+ ChatConfig.colorCodes.defaultColor
-							+ ((ChatConfig.miscellaneous.usePrefix) ? ChatConfig.miscellaneous.prefix
-									: "From " + ChatConfig.colorCodes.posColor
+					((ServerPlayerEntity) name).sendMessage(new StringTextComponent(ChatConfig.SERVER.bracketColor.get() + "["
+							+ ChatConfig.SERVER.defaultColor.get()
+							+ ((ChatConfig.SERVER.usePrefix.get()) ? ChatConfig.SERVER.prefix.get()
+									: "From " + ChatConfig.SERVER.posColor.get()
 											+ compareCoordinatesDistance(event.getPlayer().getPosition(),
 													comparePlayer.getPosition())
-											+ ChatConfig.colorCodes.defaultColor + " blocks away")
-							+ ChatConfig.colorCodes.bracketColor + "] " + ChatConfig.colorCodes.angleBraceColor + "<"
-							+ ChatConfig.colorCodes.nameColor + playerName(event.getPlayer(), event)
-							+ ChatConfig.colorCodes.angleBraceColor + "> " + ChatConfig.colorCodes.bodyColor
-							+ message));
+											+ ChatConfig.SERVER.defaultColor.get() + " blocks away")
+							+ ChatConfig.SERVER.bracketColor.get() + "] " + ChatConfig.SERVER.angleBraceColor.get() + "<"
+							+ ChatConfig.SERVER.nameColor.get() + playerName(event.getPlayer()).getString()
+							+ ChatConfig.SERVER.angleBraceColor.get() + "> " + ChatConfig.SERVER.bodyColor.get()
+							+ message), mainPlayer.getUniqueID());
 				} // end if
 			}
 
@@ -77,7 +75,7 @@ public class ChatListener {
 		event.setCanceled(true); //Required for CustomNPC Support
 	} // end onchat
 
-	public double compareCoordinatesDistance(BlockPos player1, BlockPos player2) {
+	public static double compareCoordinatesDistance(BlockPos player1, BlockPos player2) {
 		double x = Math.abs(player1.getX() - player2.getX());
 		double y = Math.abs(player1.getY() - player2.getY());
 		double z = Math.abs(player1.getZ() - player2.getZ());

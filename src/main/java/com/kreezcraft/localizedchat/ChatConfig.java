@@ -1,95 +1,124 @@
 package com.kreezcraft.localizedchat;
 
-import net.minecraftforge.common.config.Config;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.config.ModConfig;
+import org.apache.commons.lang3.tuple.Pair;
 
-@EventBusSubscriber
-@Config(modid = LocalizedChat.MODID, category = "")
 public class ChatConfig {
 
-	@Config.Comment({ "Chat Restrictions",
-			"talkRange doesn't have a toggle value, because then the mod would be useless" })
-	@Config.Name("Restrictions")
-	public static Restrictions restrictions = new Restrictions();
+	public static class Server {
 
-@Config.Name("Miscellaneous")
-public static Miscellaneous miscellaneous = new Miscellaneous();
+		public final IntValue talkRange;
+		public final BooleanValue opAsPlayer;
 
-	@Config.Comment({
-			"These codes control the output of the colors sent to the client for the various parts of the mod",
-			"Color codes reference at http://minecraft.wikia.com/wiki/Formatting_Codes" })
-	@Config.Name("Color Codes")
-	public static ColorCodes colorCodes = new ColorCodes();
-	
-	public static class Restrictions {
+		public final ConfigValue<? extends String> prefix;
+		public final BooleanValue usePrefix;
 
-		@Config.Comment({
-				"The maximum range at which a player local to another player can be heard without requiring being an op.",
-				"Default: 100" })
-		@Config.Name("Range")
-		public int talkRange = 100;
 
-		@Config.Comment({ "Set to true to treat operators like players. Aka talking hits the entire world", "Default: false" })
-		@Config.Name("Operator as Players")
-		public boolean opAsPlayer = false;
+		public final ConfigValue<? extends String> bracketColor;
+		public final ConfigValue<? extends String> angleBraceColor;
+		public final ConfigValue<? extends String> posColor;
+		public final ConfigValue<? extends String> nameColor;
+		public final ConfigValue<? extends String> bodyColor;
+		public final ConfigValue<? extends String> defaultColor;
+		public final ConfigValue<? extends String> errorColor;
+		public final ConfigValue<? extends String> usageColor;
+		public final ConfigValue<? extends String> channelColor;
 
+		Server(ForgeConfigSpec.Builder builder) {
+			builder.comment("Chat Restrictions",
+					"talkRange doesn't have a toggle value, because then the mod would be useless")
+					.push("restrictions");
+
+			talkRange = builder
+					.comment("The maximum range at which a player local to another player can be heard without requiring being an op.",
+							"Default: 100")
+					.defineInRange("talkRange", 100, 0, Integer.MAX_VALUE);
+
+			opAsPlayer = builder
+					.comment("Set to true to treat operators like players. Aka talking hits the entire world", "Default: false")
+					.define("opAsPlayer", false);
+
+			builder.pop();
+
+			builder.comment("Miscellaneous")
+					.push("miscellaneous");
+
+			prefix = builder
+					.comment("If alternate prefix is enabled then the distance won't be displayed but this prefix will.")
+					.define("prefix", "", o -> (o instanceof String));
+
+			usePrefix = builder
+					.comment("Enable to use the prefix you set above")
+					.define("usePrefix", false);
+
+			builder.pop();
+
+			builder.comment("These codes control the output of the colors sent to the client for the various parts of the mod",
+					"Color codes reference at http://minecraft.wikia.com/wiki/Formatting_Codes")
+					.push("color_codes");
+
+			bracketColor = builder
+					.comment("Sets the color for brackets []")
+					.define("bracketColor", "ยง6", o -> (o instanceof String));
+
+			angleBraceColor = builder
+					.comment("Sets the color for angle braces <>")
+					.define("angleBraceColor", "ยง7", o -> (o instanceof String));
+
+			posColor = builder
+					.comment("Sets the color for positional information")
+					.define("posColor", "ยงe", o -> (o instanceof String));
+
+			nameColor = builder
+					.comment("Sets the color to be used player names")
+					.define("nameColor", "ยงf", o -> (o instanceof String));
+
+			bodyColor = builder
+					.comment("Sets the color the body of the message")
+					.define("bodyColor", "ยงf", o -> (o instanceof String));
+
+			defaultColor = builder
+					.comment("The color to use when no other color will do")
+					.define("defaultColor", "ยงf", o -> (o instanceof String));
+
+			errorColor = builder
+					.comment("The color to use when an error is issued")
+					.define("errorColor", "ยง4", o -> (o instanceof String));
+
+			usageColor = builder
+					.comment("The color to use for the usage text")
+					.define("usageColor", "ยง2", o -> (o instanceof String));
+
+			channelColor = builder
+					.comment("The color to use for channel names")
+					.define("channelColor", "ยง2", o -> (o instanceof String));
+
+
+			builder.pop();
+		}
 	}
 
-	public static class Miscellaneous {
-		@Config.Comment({"If alternate prefix is enabled then the distance won't be displayed but this prefix will."})
-		@Config.Name("Alternate Prefix")
-		public String prefix = "";
-		
-		@Config.Comment({"Enable to use the prefix you set above"})
-		@Config.Name("Default Prefix Override")
-		public boolean usePrefix = false;
-	}
-	
-	public static class ColorCodes {
-		@Config.Comment({ "Sets the color for brackets []" })
-		@Config.Name("Bracket Color:")
-		public String bracketColor = "ง6";
+	public static final ForgeConfigSpec serverSpec;
+	public static final ChatConfig.Server SERVER;
 
-		@Config.Comment({ "Sets the color for angle braces <>" })
-		@Config.Name("Angle Brace Color")
-		public String angleBraceColor = "ง7";
-
-		@Config.Comment({ "Sets the color for positional information" })
-		@Config.Name("Postional Color")
-		public String posColor = "งe";
-
-		@Config.Comment({ "Sets the color to be used player names" })
-		@Config.Name("Name Color")
-		public String nameColor = "งf";
-
-		@Config.Comment({ "Sets the color the body of the message" })
-		@Config.Name("Message Color")
-		public String bodyColor = "งf";
-
-		@Config.Comment({ "The color to use when no other color will do" })
-		@Config.Name("Default Color")
-		public String defaultColor = "งf";
-
-		@Config.Comment({ "The color to use when an error is issued" })
-		@Config.Name("Error Color")
-		public String errorColor = "ง4";
-
-		@Config.Comment({ "The color to use for the usage text" })
-		@Config.Name("Usage Color")
-		public String usageColor = "ง2";
-
-		@Config.Comment({ "The color to use for channel names" })
-		@Config.Name("Channel Name Color")
-		public String channelColor = "ง2";
+	static {
+		final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
+		serverSpec = specPair.getRight();
+		SERVER = specPair.getLeft();
 	}
 
 	@SubscribeEvent
-	public static void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-		if (event.getModID().equals(LocalizedChat.MODID)) {
-			ConfigManager.sync(LocalizedChat.MODID, Config.Type.INSTANCE);
-		}
+	public static void onLoad(final ModConfig.Loading configEvent) {
+		LocalizedChat.logger.debug("Loaded Spoiled's config file {}", configEvent.getConfig().getFileName());
+	}
+
+	@SubscribeEvent
+	public static void onFileChange(final ModConfig.Reloading configEvent) {
+		LocalizedChat.logger.debug("Spoiled's config just got changed on the file system!");
 	}
 }

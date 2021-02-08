@@ -1,0 +1,15 @@
+modLoader="javafml"
+loaderVersion="[36,)"
+issueTrackerURL="https://www.curseforge.com/minecraft/mc-mods/localized-chat"
+license="MIT"
+
+[[mods]]
+modId="localizedchat"
+version="${file.jarVersion}"
+displayName="Localized Chat"
+displayURL="https://gitlab.com/kreezxil/Localized-Chat/-/issues"
+authors="kreezxil"
+description='''
+A local chat mod that includes shouting.
+'''
+credits="oliver276 for the original WhisperingShout_Forge version for 1.7.10"
