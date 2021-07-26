@@ -114,11 +114,11 @@ public class ChatConfig {
 
 	@SubscribeEvent
 	public static void onLoad(final ModConfig.Loading configEvent) {
-		LocalizedChat.logger.debug("Loaded Spoiled's config file {}", configEvent.getConfig().getFileName());
+		LocalizedChat.logger.debug("Loaded Localized Chat's config file {}", configEvent.getConfig().getFileName());
 	}
 
 	@SubscribeEvent
 	public static void onFileChange(final ModConfig.Reloading configEvent) {
-		LocalizedChat.logger.debug("Spoiled's config just got changed on the file system!");
+		LocalizedChat.logger.debug("Localized Chat's config just got changed on the file system!");
 	}
 }
