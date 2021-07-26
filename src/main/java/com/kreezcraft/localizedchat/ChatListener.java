@@ -2,7 +2,6 @@ package com.kreezcraft.localizedchat;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
-import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
@@ -26,15 +25,11 @@ public class ChatListener {
 		String message = event.getMessage();
 		int range = ChatConfig.SERVER.talkRange.get();
 
-		System.out.println(message);
 		World workingWorld = event.getPlayer().getEntityWorld();
 		MinecraftServer server = workingWorld.getServer();
 		List<? extends PlayerEntity> playerEntities = workingWorld.getPlayers();
 		PlayerEntity mainPlayer = workingWorld.getPlayerByUuid(event.getPlayer().getUniqueID());
 		
-		//System.out.print(mainPlayer.getGameProfile());
-
-		System.out.println(playerName(mainPlayer).getString());
 		for (PlayerEntity name : playerEntities) {
 			PlayerEntity comparePlayer = workingWorld.getPlayerByUuid(name.getUniqueID());
 			if (mainPlayer == comparePlayer) { // handles local echo
